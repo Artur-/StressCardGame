@@ -1,0 +1,74 @@
+/* Import the reindeer theme.*/
+/* This only allows us to use the mixins defined in it and does not add any styles by itself. */
+@import "../reindeer/reindeer.scss";
+
+/* This contains all of your theme.*/
+/* If somebody wants to extend the theme she will include this mixin. */
+@mixin stresscardgametheme {
+  /* Include all the styles from the reindeer theme */
+  @include reindeer;
+  /* Insert your theme rules here */
+  	&.v-app {
+    	 background-color: rgb(0, 109, 85);
+    }
+    .v-widget:not(input) {
+    	-webkit-user-select: none;
+    	-webkit-touch-callout: none;
+    	-khtml-user-select: none;
+    	-moz-user-select: none;
+    	-ms-user-select: none;
+    	user-select: none;
+  	} 
+  
+.glow {
+		display:none;
+}
+
+.choosePile .glow {
+	display: block;
+	border: 5px solid rgb(100,100,255);
+	border-radius: 15px;
+	-webkit-animation-name: pulsate;
+    -webkit-animation-duration: .5s;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: infinite;
+	animation-name: pulsate;
+    animation-duration: .5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite
+	
+}
+
+@-moz-keyframes pulsate {
+    0% {  opacity: 0.0}
+    10% { opacity: .20}
+    20% { opacity: .40 }
+    30% { opacity: .60 }
+    40% {  opacity: .80 } 
+    50% {  opacity: 1.0}
+    60% {  opacity: .80}
+    70% {  opacity: .60}
+    80% {   opacity: .40}
+    90% {   opacity: .20}
+    100% { opacity: 0.0}
+}
+@-webkit-keyframes pulsate {
+    0% {  opacity: 0.0}
+    10% { opacity: .20}
+    20% { opacity: .40 }
+    30% { opacity: .60 }
+    40% {  opacity: .80 } 
+    50% {  opacity: 1.0}
+    60% {  opacity: .80}
+    70% {  opacity: .60}
+    80% {   opacity: .40}
+    90% {   opacity: .20}
+    100% { opacity: 0.0}
+ }
+ 
+ .playerName {
+ 	line-height: 30px; 
+ 	font-size: 18px;
+ 	font-weight: bold;
+}
+}
