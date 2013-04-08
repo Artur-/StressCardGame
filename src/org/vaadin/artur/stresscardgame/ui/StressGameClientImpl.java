@@ -8,6 +8,7 @@ import org.vaadin.artur.stresscardgame.engine.IllegalPlayException;
 import org.vaadin.artur.stresscardgame.engine.PlayerInfo;
 import org.vaadin.artur.stresscardgame.engine.StressGameEngine;
 import org.vaadin.artur.stresscardgame.engine.data.CardInfo;
+import org.vaadin.artur.stresscardgame.engine.data.DeckCounts;
 import org.vaadin.artur.stresscardgame.engine.data.StressGameClient;
 
 import com.vaadin.shared.Position;
@@ -41,8 +42,7 @@ public class StressGameClientImpl implements StressGameClient,
             location = playerInfo.getLocation().getRegionName() + ", "
                     + playerInfo.getLocation().getCountryName();
         }
-        gameLayout.setOtherPlayerText("Opponent: " + playerInfo.getName()
-                + "\nLocation: " + location);
+        gameLayout.setOtherPlayerText("Opponent: " + playerInfo.getName());
     }
 
     private void refreshLayout() {
@@ -51,6 +51,12 @@ public class StressGameClientImpl implements StressGameClient,
         gameLayout.refreshOpponentVisibleCards(gameEngine
                 .getVisibleCards(1 - playerNumber));
         gameLayout.refreshPlayPiles(gameEngine.getPlayPileTopCards());
+
+        DeckCounts deckCounts = gameEngine.getDeckCounts();
+        gameLayout.setDeckCounts(deckCounts.getPlayerDecks().get(playerNumber),
+                deckCounts.getPlayerDecks().get(1 - playerNumber), deckCounts
+                        .getPlayPiles().get(0), deckCounts.getPlayPiles()
+                        .get(1));
 
     }
 
@@ -110,7 +116,6 @@ public class StressGameClientImpl implements StressGameClient,
             @Override
             public void run() {
                 gameLayout.setChoosePileMode(new PileChoiceListener() {
-
                     @Override
                     public void pileChosen(int pile) {
                         gameEngine.pileChosen(playerNumber, pile);

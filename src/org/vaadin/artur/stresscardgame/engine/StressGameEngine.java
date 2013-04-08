@@ -6,8 +6,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.vaadin.artur.stresscardgame.engine.data.CardInfo;
+import org.vaadin.artur.stresscardgame.engine.data.DeckCounts;
 import org.vaadin.artur.stresscardgame.engine.data.StressGameClient;
-
 
 public class StressGameEngine implements Serializable {
     private LockedStressGameEngine engine = new LockedStressGameEngine();
@@ -58,6 +58,15 @@ public class StressGameEngine implements Serializable {
         gameLock.lock();
         try {
             engine.pileChosen(playerNumber, pile);
+        } finally {
+            gameLock.unlock();
+        }
+    }
+
+    public DeckCounts getDeckCounts() {
+        gameLock.lock();
+        try {
+            return engine.getDeckCounts();
         } finally {
             gameLock.unlock();
         }

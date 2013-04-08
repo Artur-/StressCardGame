@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.vaadin.artur.stresscardgame.engine.data.CardInfo;
+import org.vaadin.artur.stresscardgame.engine.data.DeckCounts;
 import org.vaadin.artur.stresscardgame.engine.data.DeckInfo;
 import org.vaadin.artur.stresscardgame.engine.data.StressGameClient;
 import org.vaadin.artur.stresscardgame.engine.data.StressGameState;
 import org.vaadin.artur.stresscardgame.engine.data.StressPlayerState;
 import org.vaadin.artur.stresscardgame.engine.util.CardUtil;
-
 
 public class LockedStressGameEngine implements Serializable {
     private enum EngineState {
@@ -309,5 +309,22 @@ public class LockedStressGameEngine implements Serializable {
 
         deck.addCardsAtBottom(pile.drawAllCards());
         deck.shuffle();
+    }
+
+    public DeckCounts getDeckCounts() {
+        DeckCounts dc = new DeckCounts();
+        List<Integer> playerDecks = new ArrayList<Integer>();
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
+            playerDecks.add(state.getPlayerState(i).getDeck()
+                    .getNumberOfCards());
+        }
+        dc.setPlayerDecks(playerDecks);
+
+        List<Integer> playPiles = new ArrayList<Integer>();
+        for (DeckInfo pile : state.getPlayPiles()) {
+            playPiles.add(pile.getNumberOfCards());
+        }
+        dc.setPlayPiles(playPiles);
+        return dc;
     }
 }

@@ -43,6 +43,10 @@ public class StressGameLayout extends AbsoluteLayout {
     private Label pileGlow = new Label();
     private PileChoiceListener pileChoiceListener = null;
     private Label otherPlayerInfo = new Label("", ContentMode.PREFORMATTED);
+    private Label ownDeckCount;
+    private Label opponentDeckCount;
+    private Label ownGamePileCount;
+    private Label opponentGamePileCount;
 
     public StressGameLayout() {
         pileGlow.setStyleName("glow");
@@ -66,7 +70,9 @@ public class StressGameLayout extends AbsoluteLayout {
         }
 
         addCard(opponentDeck, 0, 0);
+        opponentDeckCount = createDeckCount(0, 0);
         addCard(ownDeck, 2, OWN_PILES + 1);
+        ownDeckCount = createDeckCount(2, OWN_PILES + 1);
 
         for (int i = 0; i < OWN_PILES; i++) {
             addCard(opponentCards[i], 0, i + 1);
@@ -80,6 +86,7 @@ public class StressGameLayout extends AbsoluteLayout {
                 pileClicked(0);
             }
         });
+
         opponentGamePile = new CardPile();
         opponentGamePile.addListener(new ClickListener() {
             @Override
@@ -89,9 +96,22 @@ public class StressGameLayout extends AbsoluteLayout {
         });
 
         addCard(ownGamePile, 1, 2);
+        ownGamePileCount = createDeckCount(1, 2);
         addCard(opponentGamePile, 1, 3);
+        opponentGamePileCount = createDeckCount(1, 3);
 
         addCard(otherPlayerInfo, 0, 5);
+    }
+
+    private Label createDeckCount(int row, int column) {
+        Label l = new Label();
+        l.setSizeUndefined();
+        l.addStyleName("deckCount");
+        addCard(l, row, column);
+        ComponentPosition p = getPosition(l);
+        p.setTopValue(p.getTopValue() + Card.HEIGHT);
+
+        return l;
     }
 
     protected void pileClicked(int pile) {
@@ -256,5 +276,14 @@ public class StressGameLayout extends AbsoluteLayout {
 
     public void setOtherPlayerText(String text) {
         otherPlayerInfo.setValue(text);
+    }
+
+    public void setDeckCounts(int cardsInOwnDeck, int cardsInOpponentDeck,
+            int cardsInOwnGamePile, int cardsInOpponentGamePile) {
+        ownDeckCount.setValue(cardsInOwnDeck + " cards");
+        opponentDeckCount.setValue(cardsInOpponentDeck + " cards");
+        ownGamePileCount.setValue(cardsInOwnGamePile + " cards");
+        opponentGamePileCount.setValue(cardsInOpponentGamePile + " cards");
+
     }
 }
