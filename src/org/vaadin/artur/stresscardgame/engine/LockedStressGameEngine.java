@@ -1,5 +1,10 @@
 package org.vaadin.artur.stresscardgame.engine;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +17,13 @@ import org.vaadin.artur.stresscardgame.engine.data.DeckInfo;
 import org.vaadin.artur.stresscardgame.engine.data.StressGameClient;
 import org.vaadin.artur.stresscardgame.engine.data.StressGameState;
 import org.vaadin.artur.stresscardgame.engine.data.StressPlayerState;
+import org.vaadin.artur.stresscardgame.engine.event.AnnounceWinnerEvent;
+import org.vaadin.artur.stresscardgame.engine.event.GameEvent;
+import org.vaadin.artur.stresscardgame.engine.event.GameStartedEvent;
+import org.vaadin.artur.stresscardgame.engine.event.MovePerformedEvent;
+import org.vaadin.artur.stresscardgame.engine.event.PileChoiceEvent;
+import org.vaadin.artur.stresscardgame.engine.event.PileChoiceResolvedEvent;
+import org.vaadin.artur.stresscardgame.engine.event.RedealEvent;
 import org.vaadin.artur.stresscardgame.engine.util.CardUtil;
 
 public class LockedStressGameEngine implements Serializable {
@@ -55,10 +67,40 @@ public class LockedStressGameEngine implements Serializable {
         drawPileCards();
 
         for (int playerNumber = 0; playerNumber < players.size(); playerNumber++) {
-            players.get(playerNumber).gameStarted(playerNumber, playerInfo);
+            GameStartedEvent event = new GameStartedEvent();
+            event.setPlayerNumber(playerNumber);
+            event.setPlayerInfo(playerInfo);
+
+            asyncFire(players.get(playerNumber), event);
         }
 
         stressCheck();
+    }
+
+    private void asyncFire(final StressGameClient stressGameClient,
+            GameEvent event) {
+        try {
+            final GameEvent clonedEvent = clone(event);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    clonedEvent.fire(stressGameClient);
+                }
+            }).start();
+        } catch (Exception e) {
+            throw new RuntimeException("asyncFire failed", e);
+        }
+
+    }
+
+    public static <T extends Serializable> T clone(T t) throws IOException,
+            ClassNotFoundException {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        ObjectOutputStream objectWriter = new ObjectOutputStream(bytes);
+        objectWriter.writeObject(t);
+        ObjectInputStream objectReader = new ObjectInputStream(
+                new ByteArrayInputStream(bytes.toByteArray()));
+        return (T) objectReader.readObject();
     }
 
     private void setupDecks() {
@@ -139,7 +181,7 @@ public class LockedStressGameEngine implements Serializable {
     private void postPlayCard() {
         // Notify other player about move
         for (StressGameClient p : players) {
-            p.movePerformed();
+            asyncFire(p, new MovePerformedEvent());
         }
 
         if (winnerCheck()) {
@@ -156,7 +198,7 @@ public class LockedStressGameEngine implements Serializable {
 
                 // Notify players about winner
                 for (StressGameClient p : players) {
-                    p.announceWinner(player);
+                    asyncFire(p, new AnnounceWinnerEvent(player));
                 }
                 engineState = EngineState.ENDED;
                 return true;
@@ -198,7 +240,7 @@ public class LockedStressGameEngine implements Serializable {
         if (drawPileCards()) {
             // Card(s) redrawn and game continues
             for (StressGameClient p : players) {
-                p.redeal();
+                asyncFire(p, new RedealEvent());
             }
         }
 
@@ -229,7 +271,7 @@ public class LockedStressGameEngine implements Serializable {
     private void doPileChoice() {
         // Both decks are empty
         for (StressGameClient p : players) {
-            p.pileChoice();
+            asyncFire(p, new PileChoiceEvent());
         }
 
         pileChoicePending = true;
@@ -292,7 +334,7 @@ public class LockedStressGameEngine implements Serializable {
         deckToEmptySlots();
 
         for (StressGameClient p : players) {
-            p.pileChoiceResolved();
+            asyncFire(p, new PileChoiceResolvedEvent());
         }
         pileChoicePending = false;
     }

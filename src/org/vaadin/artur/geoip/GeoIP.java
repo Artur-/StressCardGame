@@ -1,6 +1,7 @@
 package org.vaadin.artur.geoip;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collections;
@@ -17,7 +18,7 @@ public class GeoIP {
     private static Map<String, Location> cache = Collections
             .synchronizedMap(new HashMap<String, GeoIP.Location>());
 
-    public static class Location {
+    public static class Location implements Serializable {
         private String ip;
         private String areacode;
         private String city;

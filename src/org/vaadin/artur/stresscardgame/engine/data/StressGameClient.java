@@ -1,14 +1,10 @@
 package org.vaadin.artur.stresscardgame.engine.data;
 
-import java.util.Map;
-
-import org.vaadin.artur.stresscardgame.engine.PlayerInfo;
-
+import org.vaadin.artur.stresscardgame.engine.event.GameStartedEvent;
 
 public interface StressGameClient {
 
-    public void gameStarted(int playerNumber,
-            Map<Integer, PlayerInfo> playerInfo);
+    public void gameStarted(GameStartedEvent event);
 
     public void movePerformed();
 
@@ -19,4 +15,5 @@ public interface StressGameClient {
     public void pileChoiceResolved();
 
     public void announceWinner(int playerNumber);
+
 }

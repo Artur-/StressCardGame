@@ -1,7 +1,6 @@
 package org.vaadin.artur.stresscardgame.ui;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.vaadin.artur.stresscardgame.engine.IllegalPlayException;
@@ -10,6 +9,7 @@ import org.vaadin.artur.stresscardgame.engine.StressGameEngine;
 import org.vaadin.artur.stresscardgame.engine.data.CardInfo;
 import org.vaadin.artur.stresscardgame.engine.data.DeckCounts;
 import org.vaadin.artur.stresscardgame.engine.data.StressGameClient;
+import org.vaadin.artur.stresscardgame.engine.event.GameStartedEvent;
 
 import com.vaadin.shared.Position;
 import com.vaadin.ui.Notification;
@@ -30,13 +30,13 @@ public class StressGameClientImpl implements StressGameClient,
     }
 
     @Override
-    public void gameStarted(int playerNumber,
-            Map<Integer, PlayerInfo> playerInfos) {
+    public void gameStarted(GameStartedEvent event) {
+        playerNumber = event.getPlayerNumber();
         getLogger().fine(this + " (" + playerNumber + "):  Game started");
-        this.playerNumber = playerNumber;
+
         // Game started, refresh layout
         refreshLayout();
-        PlayerInfo playerInfo = playerInfos.get(1 - playerNumber);
+        PlayerInfo playerInfo = event.getPlayerInfo().get(1 - playerNumber);
         String location = "???";
         if (playerInfo.getLocation() != null) {
             location = playerInfo.getLocation().getRegionName() + ", "
