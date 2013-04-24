@@ -30,19 +30,27 @@ public class StressGameClientImpl implements StressGameClient,
     }
 
     @Override
-    public void gameStarted(GameStartedEvent event) {
-        playerNumber = event.getPlayerNumber();
-        getLogger().fine(this + " (" + playerNumber + "):  Game started");
+    public void gameStarted(final GameStartedEvent event) {
+        gameLayout.getUI().runSafely(new Runnable() {
+            @Override
+            public void run() {
+                playerNumber = event.getPlayerNumber();
+                getLogger().fine(
+                        this + " (" + playerNumber + "):  Game started");
 
-        // Game started, refresh layout
-        refreshLayout();
-        PlayerInfo playerInfo = event.getPlayerInfo().get(1 - playerNumber);
-        String location = "???";
-        if (playerInfo.getLocation() != null) {
-            location = playerInfo.getLocation().getRegionName() + ", "
-                    + playerInfo.getLocation().getCountryName();
-        }
-        gameLayout.setOtherPlayerText("Opponent: " + playerInfo.getName());
+                // Game started, refresh layout
+                refreshLayout();
+                PlayerInfo playerInfo = event.getPlayerInfo().get(
+                        1 - playerNumber);
+                String location = "???";
+                if (playerInfo.getLocation() != null) {
+                    location = playerInfo.getLocation().getRegionName() + ", "
+                            + playerInfo.getLocation().getCountryName();
+                }
+                gameLayout.setOtherPlayerText("Opponent: "
+                        + playerInfo.getName());
+            }
+        });
     }
 
     private void refreshLayout() {
