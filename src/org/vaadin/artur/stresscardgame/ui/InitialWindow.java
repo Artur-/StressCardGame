@@ -65,9 +65,10 @@ public class InitialWindow extends Window {
                 waiting.setVisible(true);
 
                 GameBroker.register(new BrokerClient() {
+                    @Override
                     public void gameLaunching(
                             final StressGameEngine stressGameEngine) {
-                        getUI().runSafely(new Runnable() {
+                        getUI().access(new Runnable() {
                             @Override
                             public void run() {
                                 stresscardgameUI.opponentJoined(

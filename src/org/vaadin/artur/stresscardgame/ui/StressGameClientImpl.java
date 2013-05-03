@@ -31,7 +31,7 @@ public class StressGameClientImpl implements StressGameClient,
 
     @Override
     public void gameStarted(final GameStartedEvent event) {
-        gameLayout.getUI().runSafely(new Runnable() {
+        gameLayout.getUI().access(new Runnable() {
             @Override
             public void run() {
                 playerNumber = event.getPlayerNumber();
@@ -71,7 +71,7 @@ public class StressGameClientImpl implements StressGameClient,
     @Override
     public void movePerformed() {
         getLogger().fine(this + " (" + playerNumber + "):  Move performed");
-        gameLayout.getUI().runSafely(new Runnable() {
+        gameLayout.getUI().access(new Runnable() {
             @Override
             public void run() {
                 refreshLayout();
@@ -103,7 +103,7 @@ public class StressGameClientImpl implements StressGameClient,
     public void redeal() {
         getLogger().info("New cards because of no moves remaining");
 
-        gameLayout.getUI().runSafely(new Runnable() {
+        gameLayout.getUI().access(new Runnable() {
             @Override
             public void run() {
                 Notification n = new Notification("No more moves, new cards!",
@@ -120,7 +120,7 @@ public class StressGameClientImpl implements StressGameClient,
     @Override
     public void pileChoice() {
         getLogger().fine(this + " (" + playerNumber + "):  Pile choice!");
-        gameLayout.getUI().runSafely(new Runnable() {
+        gameLayout.getUI().access(new Runnable() {
             @Override
             public void run() {
                 gameLayout.setChoosePileMode(new PileChoiceListener() {
@@ -138,7 +138,7 @@ public class StressGameClientImpl implements StressGameClient,
     public void pileChoiceResolved() {
         getLogger().fine(
                 this + " (" + playerNumber + "):  Pile choice resolved");
-        gameLayout.getUI().runSafely(new Runnable() {
+        gameLayout.getUI().access(new Runnable() {
             @Override
             public void run() {
                 gameLayout.setChoosePileMode(null);
@@ -152,7 +152,7 @@ public class StressGameClientImpl implements StressGameClient,
         getLogger().fine(
                 this + " (" + playerNumber + "):  announceWinner("
                         + playerNumber);
-        gameLayout.getUI().runSafely(new Runnable() {
+        gameLayout.getUI().access(new Runnable() {
             @Override
             public void run() {
                 Notification n = new Notification("", Type.TRAY_NOTIFICATION);

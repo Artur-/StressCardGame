@@ -1,9 +1,10 @@
 package org.vaadin.artur.stresscardgame.engine.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StressGameState {
+public class StressGameState implements Serializable {
 
     private int numberOfPlayers = 2;
 
