@@ -93,11 +93,14 @@ public class GeoIP {
             cache.put(ip, location);
             return location;
         } catch (IOException e) {
-            getLogger().log(Level.INFO, "Error doing lookup for " + ip, e);
+            // getLogger().log(Level.INFO, "Error doing lookup for " + ip, e);
         } catch (JSONException e) {
             getLogger().log(Level.INFO,
                     "Invalid response when doing lookup for " + ip, e);
+        } catch (Throwable t) {
+            getLogger().log(Level.WARNING, "Error doing lookup for " + ip, t);
         }
+
         cache.put(ip, null);
         return null;
     }
