@@ -13,24 +13,18 @@
 			not be deployed to the server -->
 		<conf name="widgetset-compile" />
 	</configurations>
-	<dependencies>
+	<dependencies defaultconf="default" defaultconfmapping="default->default">
+
 		<!-- The core server part of Vaadin -->
 		<dependency org="com.vaadin" name="vaadin-server" rev="&vaadin.version;"
-			conf="default->default" changing="true" />
-
-		<dependency org="com.vaadin" name="vaadin-push" conf="default -> default"
-			rev="&vaadin.version;" />
-		<!-- Vaadin themes -->
+			changing="true" />
+		<dependency org="com.vaadin" name="vaadin-push" rev="&vaadin.version;" />
 		<dependency org="com.vaadin" name="vaadin-themes" rev="&vaadin.version;" />
-		<dependency org="commons-io" name="commons-io" rev="1.4" />
-
+		<dependency org="commons-io" name="commons-io" rev="2.2" />
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency org="com.vaadin" name="vaadin-client-compiled"
 			rev="&vaadin.version;" changing="true" />
 
-		<!-- Vaadin client side, needed for widget set compilation -->
-		<!-- <dependency org="com.vaadin" name="vaadin-client" rev="&vaadin.version;" -->
-		<!-- changing="true" /> -->
 
 		<!-- Compiler for custom widget sets. Should not be deployed -->
 		<dependency org="com.vaadin" name="vaadin-client-compiler"
