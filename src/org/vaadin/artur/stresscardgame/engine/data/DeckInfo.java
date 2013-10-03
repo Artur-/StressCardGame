@@ -1,5 +1,6 @@
 package org.vaadin.artur.stresscardgame.engine.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import org.vaadin.artur.playingcards.collection.ShufflableArrayList;
  * Representation of a set of cards. The last card is the "top" card.
  * 
  */
-public class DeckInfo {
+public class DeckInfo implements Serializable {
 
     private ShufflableArrayList<CardInfo> cards = new ShufflableArrayList<CardInfo>();
 

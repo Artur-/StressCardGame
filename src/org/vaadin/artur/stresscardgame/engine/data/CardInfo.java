@@ -1,8 +1,10 @@
 package org.vaadin.artur.stresscardgame.engine.data;
 
+import java.io.Serializable;
+
 import org.vaadin.artur.playingcards.client.ui.Suite;
 
-public class CardInfo {
+public class CardInfo implements Serializable {
     Suite suite;
     int rank;
 
