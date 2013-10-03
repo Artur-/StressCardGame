@@ -1,15 +1,26 @@
 package org.vaadin.artur.stresscardgame.ui;
 
+import javax.servlet.annotation.WebServlet;
+
 import org.vaadin.artur.geoip.GeoIP;
 import org.vaadin.artur.stresscardgame.engine.PlayerInfo;
 import org.vaadin.artur.stresscardgame.engine.StressGameEngine;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
 @Theme("stresscardgametheme")
+@Push
 public class StressGameUI extends UI {
+
+    @WebServlet(value = "/*", asyncSupported = true)
+    @VaadinServletConfiguration(productionMode = false, ui = StressGameUI.class, widgetset = "org.vaadin.artur.stresscardgame.widgetset.StresscardgameWidgetset")
+    public static class Servlet extends VaadinServlet {
+    }
 
     private StressGameLayout gameLayout;
 
